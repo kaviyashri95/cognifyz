@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Registration</title>
+    
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+    
+    <div class="container">
+        <h2>Register Customer</h2>
+        <form id="customerForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Enter Name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Enter Email" required>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" placeholder="Enter Phone" required>
+            <label for="service">Service:</label>                    
+            <input type="text" id="service" placeholder="Service Taken" required>
+            <button type="submit">Save Customer</button>
+        </form>
+        <p id="message"></p>
+    </div>
+
+    <script >
+        document.addEventListener("DOMContentLoaded", function () {
+         const form = document.getElementById("customerForm");
+         const message = document.getElementById("message");
+        form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const service = document.getElementById("service").value.trim();
+        if (!name || !email || !phone || !service) {
+            message.style.color = "red";
+            message.innerText = "All fields are required!";
+            return;
+        }
+     
+        const apiUrl = "https://60fbca4591156a0017b4c8a7.mockapi.io/fakeData";
+        const customerData = { name, email, phone, service };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(customerData),
+            });
+            if (response.ok) {
+                message.style.color = "green";
+                message.innerText = "Customer saved successfully!";
+                form.reset();
+            } else {
+                throw new Error("Failed to save customer.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            message.style.color = "red";
+            message.innerText = "Error saving customer. Try again.";
+        }
+    });
+});
+
+    </script>
+</body>
+</html>
